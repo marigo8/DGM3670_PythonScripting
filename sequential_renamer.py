@@ -24,7 +24,7 @@ def sequential_rename_selection(name_pattern, start_num=1):
 
     # error out if "#" symbols are in multiple parts of the string
     if par[1] != z_place_holder:
-        print("\"#\" symbols must be in the same part of the name_pattern")
+        print("\"#\" symbols cannot be in multiple parts of the name_pattern")
         return
 
     # rename #
@@ -32,8 +32,8 @@ def sequential_rename_selection(name_pattern, start_num=1):
         new_name = par[0]
         new_name += str(start_num + i).zfill(z_count)
         new_name += par[2]
-        cmds.rename(sels[i], new_name)
-        print(f"{sels[i]} renamed to {new_name}")
+        obj = cmds.rename(sels[i], new_name)
+        print(f"{sels[i]} renamed to {obj}")
 
 
-sequential_rename_selection("arm_##_Jnt", start_num=0)
+sequential_rename_selection("arm_##_jnt", start_num=1)
