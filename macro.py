@@ -14,7 +14,7 @@ def create_limb(height=2, radius=.2, name="limb", parent_limb="", joint_height=.
 
     joint = cmds.polyCylinder(axis=[1, 0, 0], height=joint_height, radius=joint_radius, ch=0, cuv=0)[0]
 
-    limb = mesh_combine(limb, joint, name)
+    limb = mesh_combine(limb, joint, name + "_Geo")
 
     if parent_limb != "":
         cmds.parent(limb, parent_limb)
@@ -34,7 +34,7 @@ def create_robot_arm(prefix, shoulder_width=.6):
     arm_0 = create_limb(height=1.25, radius=.15, name=prefix + "_Arm_0", joint_height=shoulder_width, joint_radius=.4)
 
     arm_1 = create_limb(height=1, radius=.2, name=prefix + "_Arm_1", parent_limb=arm_0)
-    hand = cmds.polySphere(radius=.35, name=prefix + "_Hand", ch=0, cuv=0)[0]
+    hand = cmds.polySphere(radius=.35, name=prefix + "_Hand" + "_Geo", ch=0, cuv=0)[0]
     cmds.parent(hand, f"{arm_0}|{arm_1}")
     return [arm_0, arm_1, hand]
 
@@ -43,7 +43,7 @@ def create_robot_leg(prefix, pelvis_width = .35):
     leg_0 = create_limb(height=1.5, radius=.15, name=prefix + "_Leg_0", joint_height=pelvis_width, joint_radius=.5)
 
     leg_1 = create_limb(height=1.5, radius=.25, name=prefix + "_Leg_1", parent_limb=leg_0, joint_height=.6, joint_radius=.3)
-    foot = cmds.polyCube(width=.6, height=.5, depth=1.2, name=prefix + "_Foot", ch=0, cuv=0)[0]
+    foot = cmds.polyCube(width=.6, height=.5, depth=1.2, name=prefix + "_Foot" + "_Geo", ch=0, cuv=0)[0]
     cmds.move(0, 0, .25, foot)
     cmds.move(0, 0, 0, foot + ".rotatePivot", absolute=1)
     cmds.makeIdentity(foot, apply=True, translate=1)
@@ -53,15 +53,15 @@ def create_robot_leg(prefix, pelvis_width = .35):
 
 
 def create_robot_torso(name="torso", torso_thickness=1, shoulder_width=2, pelvis_width=1.25, torso_offset=.2, head_radius=.75):
-    torso0 = cmds.polySphere(name=name+"_0", radius=torso_thickness / 2, ch=0, cuv=0)[0]
+    torso0 = cmds.polySphere(name=name+"_0" + "_Geo", radius=torso_thickness / 2, ch=0, cuv=0)[0]
 
     torso1 = cmds.polyCube(width=torso_thickness, height=torso_thickness, depth=torso_thickness, ch=0, cuv=0)[0]
     shoulders = cmds.polyCylinder(radius=torso_thickness / 2, height=shoulder_width, axis=[1, 0, 0], ch=0, cuv=0)[0]
     cmds.move(0, torso_thickness / 2, 0, shoulders)
 
-    torso1 = mesh_combine(torso1, shoulders, name+"_1")
+    torso1 = mesh_combine(torso1, shoulders, name+"_1" + "_Geo")
 
-    head = cmds.polySphere(name="head", radius=head_radius, ch=0, cuv=0)[0]
+    head = cmds.polySphere(name="head" + "_Geo", radius=head_radius, ch=0, cuv=0)[0]
     cmds.move(0, head_radius, 0, head)
     cmds.move(0, 0, 0, head + ".rotatePivot", absolute=1)
     cmds.makeIdentity(head, apply=True, translate=1)
@@ -72,7 +72,7 @@ def create_robot_torso(name="torso", torso_thickness=1, shoulder_width=2, pelvis
     cmds.move(0, 0, 0, torso1 + ".rotatePivot", absolute=1)
     cmds.makeIdentity(torso1, apply=True, translate=1)
 
-    pelvis = cmds.polyCylinder(name="pelvis", h=pelvis_width, r=torso_thickness/4, axis=[1, 0, 0], ch=0, cuv=0)[0]
+    pelvis = cmds.polyCylinder(name="pelvis" + "_Geo", h=pelvis_width, r=torso_thickness/4, axis=[1, 0, 0], ch=0, cuv=0)[0]
 
     cmds.move(0, -torso_thickness / 4, 0, pelvis)
     cmds.move(0, 0, 0, pelvis + ".rotatePivot", absolute=1)
@@ -117,7 +117,7 @@ def create_robot():
 
     cmds.move(0, 3.5, 0, torso0)
 
-    group = cmds.group(torso0, name="Robot")
+    group = cmds.group(torso0, name="Robot" + "_Geo")
 
     return [group,
                 torso0,
