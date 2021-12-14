@@ -21,10 +21,11 @@ class tools_ui:
                                                     label="OverrideColor",
                                                     minValue=1,
                                                     maxValue=32,
-                                                    changeCommand=lambda: self.override_color_select_cmd())
-        cmds.button(parent=column, label="Apply Color To Selection", command=lambda x: self.override_color_apply_cmd())
+                                                    changeCommand=lambda *x: self.override_color_select_cmd())
+        cmds.button(parent=column, label="Apply Color To Selection", command=lambda *x: self.override_color_apply_cmd())
 
         # controls
+        cmds.button(parent=column, label="Create Controls", command=lambda *x: self.create_controls_cmd())
 
         self.show()
 
@@ -46,3 +47,9 @@ class tools_ui:
         for sel in sels:
             tools.change_color(sel, self.override_color)
         return
+
+    def create_controls_cmd(self):
+        import tools
+        importlib.reload(tools)
+
+        tools.create_controls_hierarchy(self.override_color)
